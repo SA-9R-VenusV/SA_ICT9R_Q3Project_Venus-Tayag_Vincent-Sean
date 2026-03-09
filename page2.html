@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eSakayMo – Fare Calculator</title>
+  <style>
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:#0f2027;
+      color:white;
+      min-height:100vh;
+    }
+    header {
+      background:rgba(0,0,0,0.5);
+      padding:12px;
+      text-align:center;
+    }
+    .logo {
+      font-size:1.9rem;
+      color:#ffcc00;
+      font-weight:bold;
+    }
+    main {
+      padding:40px 20px;
+      max-width:540px;
+      margin:0 auto;
+    }
+    h2 {
+      text-align:center;
+      color:#ffeb99;
+      margin-bottom:2em;
+    }
+    label {
+      display:block;
+      margin:1.5em 0 0.5em;
+      font-weight:bold;
+      font-size:1.15rem;
+    }
+    input[type="text"],
+    input[type="number"] {
+      width:100%;
+      padding:14px 16px;
+      border-radius:8px;
+      border:none;
+      font-size:1.15rem;
+      background:#f0f4f8;
+      color:#0f2027;
+      box-sizing: border-box;
+    }
+    input:focus {
+      outline:none;
+      box-shadow:0 0 0 3px #ffcc00aa;
+    }
+    .row {
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+    .row > div {
+      flex:1;
+      min-width:220px;
+    }
+    button#calculateBtn {
+      margin-top:3em;
+      width:100%;
+      padding:18px;
+      font-size:1.45rem;
+      font-weight:bold;
+      background: linear-gradient(135deg, #ffcc00, #ffaa00);
+      color:#0f2027;
+      border:none;
+      border-radius:60px;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(255,170,0,0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    button#calculateBtn:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow:0 10px 25px rgba(255,170,0,0.6);
+      background: linear-gradient(135deg, #ffe066, #ffcc00);
+    }
+    button#calculateBtn:active {
+      transform: translateY(-1px) scale(0.98);
+      box-shadow:0 4px 12px rgba(255,170,0,0.5);
+    }
+    button#calculateBtn::after {
+      content: " →";
+      font-weight: bold;
+      transition: margin-left 0.3s;
+    }
+    button#calculateBtn:hover::after {
+      margin-left: 12px;
+    }
+    .back {
+      margin-top:2.5em;
+      text-align:center;
+    }
+    .back a {
+      color:#ffcc00;
+      text-decoration:none;
+      font-size:1.15rem;
+    }
+    footer {
+      text-align:center;
+      padding:30px;
+      color:#888;
+      font-size:0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">eSakayMo</div>
+  </header>
+
+  <main>
+    <h2>Where are you going?</h2>
+
+    <form id="fareForm">
+
+      <label for="pickup">Pickup Location</label>
+      <input list="pickup-suggestions" type="text" id="pickup" placeholder="e.g. SM North EDSA, Cubao, Monumento" required autocomplete="off">
+      <datalist id="pickup-suggestions">
+        <option value="SM North EDSA">
+        <option value="Cubao">
+        <option value="Monumento">
+        <option value="Ayala Avenue">
+        <option value="Taft Avenue">
+        <option value="Quiapo">
+        <option value="Divisoria">
+        <option value="UP Diliman">
+        <option value="Ateneo de Manila">
+        <option value="SM Megamall">
+        <option value="BGC Taguig">
+        <option value="Alabang">
+        <option value="Fairview">
+        <option value="Commonwealth">
+      </datalist>
+
+      <label for="dropoff">Destination</label>
+      <input list="dropoff-suggestions" type="text" id="dropoff" placeholder="e.g. Quezon Memorial Circle, MOA, NAIA Terminal 3" required autocomplete="off">
+      <datalist id="dropoff-suggestions">
+        <option value="Quezon Memorial Circle">
+        <option value="MOA (Mall of Asia)">
+        <option value="NAIA Terminal 3">
+        <option value="SM Mall of Asia">
+        <option value="Araneta City Bus Port">
+        <option value="EDSA Shrine">
+        <option value="Greenhills Shopping Center">
+        <option value="Bonifacio Global City">
+        <option value="Ayala Malls Manila Bay">
+      </datalist>
+
+      <div class="row">
+        <div>
+          <label for="distance">Distance (km)</label>
+          <input type="number" id="distance" step="0.1" min="0.5" placeholder="e.g. 4.8 or 12.5" required>
+        </div>
+        <div>
+          <label for="promo">Promo Code (optional)</label>
+          <input type="text" id="promo" placeholder="e.g. SAKAY10">
+        </div>
+      </div>
+
+      <button type="submit" id="calculateBtn">Calculate Fare</button>
+    </form>
+
+    <div class="back">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </main>
+
+  <footer>
+    Sean Tayag Vincent Venus | ICT9 – Section Ruby ©2026
+  </footer>
+
+  <script>
+    const form = document.getElementById("fareForm");
+    const btn = document.getElementById("calculateBtn");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Button feedback
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "Calculating...";
+      btn.disabled = true;
+
+      setTimeout(() => {
+        const distance = Number(document.getElementById("distance").value);
+        const promo = document.getElementById("promo").value.trim().toUpperCase();
+
+        const baseFare    = 50;
+        const baseKM      = 2;
+        const perKMRate   = 10;
+
+        let fare = baseFare;
+        if (distance > baseKM) {
+          fare += (distance - baseKM) * perKMRate;
+        }
+
+        let discount = 0;
+        let message = "";
+        if (promo === "SAKAY10") {
+          discount = 10;
+          message = "Promo applied: ₱10 off!";
+        } else if (promo && promo !== "") {
+          message = "Invalid promo code.";
+        }
+
+        const finalFare = Math.max(0, fare - discount);
+
+        const params = new URLSearchParams();
+        params.append("pickup",   document.getElementById("pickup").value || "—");
+        params.append("dropoff",  document.getElementById("dropoff").value || "—");
+        params.append("distance", distance.toFixed(1));
+        params.append("fare",     fare.toFixed(0));
+        params.append("discount", discount);
+        params.append("final",    finalFare.toFixed(0));
+        params.append("msg",      message);
+
+        alert("Done! Final fare would be ₱" + params.get("final"));
+        // Reset button (in case of error or back navigation)
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }, 800);
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eSakayMo Fare Guide</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(0,0,0,0.4);
+      padding: 15px;
+      text-align: center;
+    }
+    .logo {
+      font-size: 2.1rem;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      margin: 0.4em 0;
+      text-shadow: 2px 2px 8px #000;
+    }
+    .subtitle {
+      font-size: 1.4rem;
+      margin: 0.8em 0 2em;
+      color: #ffeb99;
+    }
+    .btn {
+      background: #ffcc00;
+      color: #0f2027;
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      transition: all 0.25s;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      background: #ffe066;
+    }
+    .instructions {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: 2em auto;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+      background: rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">eSakayMo</div>
+  </header>
+
+  <main>
+    <h1>Welcome to<br>eSakayMo Fare Guide!</h1>
+    <p class="subtitle">Know your motorcycle taxi fare in seconds</p>
+
+    <a href="page2.html" class="btn">Calculate Fare Now →</a>
+
+    <div class="instructions">
+      <h3>How it works</h3>
+      <ol style="text-align:left; max-width:480px; margin:1em auto;">
+        <li>Enter pickup & destination (or distance in km)</li>
+        <li>We use the official rate:
+          <ul>
+            <li>Base fare: ₱50</li>
+            <li>First 2 km: included in base</li>
+            <li>Every km after: ₱10</li>
+          </ul>
+        </li>
+        <li>Check possible discounts/promo codes</li>
+      </ol>
+    </div>
+  </main>
+
+  <footer>
+    Sean Tayag Vincent Venus | ICT9 – Section Ruby ©2026
+  </footer>
+
+</body>
+</html>
+
+
+<!-- ==================== page3.html (Result page) ==================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eSakayMo – Fare Confirmation</title>
+  <style>
+    body {margin:0; font-family:Arial,sans-serif; background:#0f2027; color:white; min-height:100vh;}
+    header {background:rgba(0,0,0,0.5); padding:12px; text-align:center;}
+    .logo {font-size:1.9rem; color:#ffcc00; font-weight:bold;}
+    main {padding:30px 20px; max-width:520px; margin:0 auto; text-align:center;}
+    h2 {color:#ffeb99;}
+    .card {
+      background:rgba(255,255,255,0.08);
+      border-radius:12px;
+      padding:24px;
+      margin:2em 0;
+      box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    }
+    .fare-big {
+      font-size:3.8rem;
+      font-weight:bold;
+      color:#ffcc00;
+      margin:0.3em 0;
+    }
+    .detail {font-size:1.15rem; margin:0.6em 0;}
+    .promo-msg {color:#90ee90; font-weight:bold; font-size:1.2rem;}
+    .btn {
+      display:inline-block;
+      background:#ffcc00;
+      color:#0f2027;
+      font-size:1.2rem;
+      font-weight:bold;
+      padding:12px 30px;
+      border-radius:50px;
+      text-decoration:none;
+      margin-top:1.5em;
+    }
+    .btn:hover {background:#ffe066;}
+    footer {text-align:center; padding:20px; color:#888; font-size:0.9rem;}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">eSakayMo</div>
+  </header>
+
+  <main>
+    <h2>Your Estimated Fare</h2>
+
+    <div class="card">
+      <div class="detail">From: <b id="showPickup"></b></div>
+      <div class="detail">To: <b id="showDropoff"></b></div>
+      <div class="detail">Distance: <b id="showDistance"></b> km</div>
+      <hr style="border-color:#444; margin:1.5em 0;">
+      <div class="detail">Base fare + additional km:</div>
+      <div class="fare-big">₱<span id="showFare"></span></div>
+      <div id="promoArea" class="promo-msg" style="min-height:1.6em;"></div>
+      <hr style="border-color:#444; margin:1.5em 0;">
+      <div class="detail" style="font-size:1.4rem;">Total to pay:</div>
+      <div class="fare-big" style="font-size:4.2rem;">₱<span id="showFinal"></span></div>
+    </div>
+
+    <a href="page3.html" class="btn">Calculate Another Ride</a>
+    <br><br>
+    <a href="index.html" class="btn" style="background:#555; color:white;">Back to Home</a>
+  </main>
+
+  <footer>
+    Sean Tayag Vincent Venus | ICT9 – Section Ruby ©2026
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    document.getElementById("showPickup").textContent   = params.get("pickup")   || "—";
+    document.getElementById("showDropoff").textContent  = params.get("dropoff")  || "—";
+    document.getElementById("showDistance").textContent = params.get("distance") || "—";
+    document.getElementById("showFare").textContent     = params.get("fare")     || "—";
+    document.getElementById("showFinal").textContent    = params.get("final")    || "—";
+
+    const msg = params.get("msg");
+    if (msg) {
+      document.getElementById("promoArea").textContent = msg;
+    }
+  </script>
+
+</body>
+</html>
